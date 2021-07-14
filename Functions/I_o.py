@@ -88,13 +88,3 @@ def I_o(mon,day,phi):
 
 	return I_o;
 
-
-
-
-
-
-
-
-
-
-
