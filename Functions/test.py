@@ -32,7 +32,9 @@ S = S(I_o,kt,rho_g,phi,delta,beta,gamma,n,N,L,alpha_n);
 
 a = np.array([1,2,3,4,5,6]);
 b = 1*5 - a*2;
+a = np.where(a<4,0,a);
+a = np.sum(a);
 
-print(I_T);
-print(S);
+
+print(a);
 

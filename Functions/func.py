@@ -331,6 +331,99 @@ def S(I_o,kt,rho_g,phi,delta,beta,gamma,n,N,L,alpha_n):
 
 	return S;
 
+#Function for calculating useful energy gain from collector (all temperatures in Kelvin)
+def Q_u(S,T_a,T_dp,T_fi,N,L_p,beta,W,d_o,d_i,delt,k,h_tube):
+	
+	T_sky = np.zeros(24);
+	Q_u = np.zeros(24);
+	
+	for z in range(24):
+		#Calculate the equivalent sky temperature
+		t = np.linspace(0.5,23.5,24);
+		T_sky[z] = T_a[z] * (0.711 + 0.0056*T_dp[z] + 0.000073*T_dp[z]**2 + 0.012*np.cos(15*t*dtr))**(1/4);
+	
+		#Intialize guess values for temperature of surfaces
+		T_sur = np.zeros(N+1);
+		T_sur[0] = T_fi + 10;
+		for i in range(N):
+			T_sur[i+1] = T_sur[i] - 10;
+		
+		#Converge on a solution for cover temperatures goven mean plate temperature
+		y = 0;
+		while y == 0:
+			#Calculate film temperatures (between surfaces)
+			T_film = np.zeros(N);
+			for j in range(N):
+				T_film[j] = (T_sur[j]+T_sur[j+1])/2;
+
+			#Calculate the temperature difference between the surfaces
+			T_dif = np.zeros(N);
+			for k in range(N):
+				T_dif[k] = T_sur[k]-T_sur[k+1];
+
+			#Calculate properties of air
+			rho = 0.0008 + (352.47/T_film);
+			k = 0.00444 + (0.0000728182*T_film);
+			mu = (0.1465 + 0.0065697*T_film - 0.0000030303*T_film**2) * 10**-5;
+			alpha = (-5.795 + 0.020289*T_film + 577.2/T_film) * 10**-5;
+			v = mu / rho;
+			beta_p = 1 / T_film;
+
+			#Calculate the Rayleigh Number
+			Ra = (9.81*beta_p*T_dif*L_p**3) / (v*alpha); 
+		
+			#Calculate the Nusselt Number (using brackets)
+			if beta > 75:
+				beta = 75;
+			b1 = 1 - ((1708*(np.sin(1.8*beta*dtr))**1.6) / (Ra*np.cos(beta*dtr)));
+			b2 = 1 - (1708/(Ra*np.cos(beta*dtr)));
+			b2 = np.where(b2<0,0,b2);
+			b3 = ((Ra*np.cos(beta*dtr))/5830)**(1/3) - 1;
+			b3 = np.where(b3<0,0,b3);
+			Nu = 1 + 1.44*b1*b2 + b3;
+		
+			#Calculate the convection heat transfer coefficients
+			h = Nu * k / L;
+			h_wind = 10; #assumed
+			h = np.absolute(np.insert(h,N,h_wind));
+
+			#Calculate the radiation heat transfer coefficients
+			sigma = 5.6697e-8;
+			e = np.array([.95,.88,.88]);
+			hr = np.zeros(N+1);
+			for m in range(N):
+				num = sigma * (T_sur[m]**2+T_sur[m+1]**2) * (T[m+1] + T_sur[m+1]);
+				den = (1/e[m]) + (1/e[m+1]) - 1;
+				hr[m] = np.absolute(num/den);
+			hr[N] = sigma * e[N] * (T_sur[N]**4-T_sky[z]**4) / (T_sur[N]-T_a[z]);
+
+			#Calculate thermal resistance
+			R = 1 / (h + hr);
+
+			#Calculate loss coeffiecent
+			U_L = 1 / np.sum(R);
+
+			#Calculate heat loss
+			QA = U_L * (T_sur[0]-T_a[z]);
+
+			#Calculate new cover temperatures
+			T_sur_n = T_sur;
+			for p in range(N):
+				T_sur_n[p+1] = T_sur[0] - QA*(np.sum(R[0:p+1]));
+
+			#Check for convergence
+			for q in range(N):
+				if np.absolute(T_sur_n[q+1]-T_sur[q+1])>0.01:
+					T_sur = T_sur_n;
+					y = 0;
+					break;
+				y = 1;
+		
+
+	return Q_u;
+		
+
+
 
 
 
