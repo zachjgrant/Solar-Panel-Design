@@ -468,7 +468,7 @@ def Q_u(S,T_a,T_dp,T_fi,N,L_p,e,beta,W,D,D_i,delt,k_p,m_dot,A_c):
 def eta(Q_u,I_T,A_c):
 	eta = np.zeros(24);
 	for i in range(24):
-		if I_T[i] == 0:
+		if I_T[i] == 0 or Q_u[i] < 0:
 			eta[i] = 0;
 		else:
 			eta[i] = Q_u[i] / (A_c * I_T[i]);		
