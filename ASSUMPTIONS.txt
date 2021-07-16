@@ -1,0 +1,23 @@
+Assumptions:
+1. Performance is steady state.
+2. Construction is of sheet and parallel tube type.
+3. The headers cover only a small portion of the collector area.
+4. The headers provide uniform flow to tubes.
+5. Energy absorbed by the covers does not affect collector thermal losses.
+6. Heat flow through a cover is one dimensional.
+7. Temperature drop through a cover is negligible.
+8. The covers are opaque to infrared radiation.
+9. There is one-dimensional heat flow through the back insulation.
+10. The sky can be considered as a blackbody for long-wave radiation at an
+equivalent sky temperature.
+11. Temperature gradients around the tubes can be negected.
+12. The temperature gradients in the direction of flow and between the tubes
+can be treated independently.
+13. Thermal properties are independent of temperature.
+14. Loss through the front and back are to the same ambient temperature.
+15. Dust and dirt on the collector are negligible.
+16. Shading of the collector and absorber plate is negligible.
+
+Variable Assumptions:
+1. Heat transfer coefficient inside the tubes is constant at 300 W/m^2K
+2. Convection heat transfer coefficient of the wind is constant at 10 W/m^2K (gentle breeze)
