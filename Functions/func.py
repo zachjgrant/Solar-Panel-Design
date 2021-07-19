@@ -167,12 +167,14 @@ def I_T(I_o,kt,rho_g,phi,delta,beta,gamma,n):
 	#Calculate when angle of incidence in 90 deg
 	def f(x):
 		return np.sin(delta*dtr)*np.sin(phi*dtr)*np.cos(beta*dtr) - np.sin(delta*dtr)*np.cos(phi*dtr)*np.sin(beta*dtr)*np.cos(gamma*dtr) + np.cos(delta*dtr)*np.cos(phi*dtr)*np.cos(beta*dtr)*np.cos(x*dtr) + np.cos(delta*dtr)*np.sin(phi*dtr)*np.sin(beta*dtr)*np.cos(gamma*dtr)*np.cos(x*dtr) + np.cos(delta*dtr)*np.sin(beta*dtr)*np.sin(gamma*dtr)*np.sin(x*dtr);
-	starting_guess = omega_s;
-	omega_0 = fsolve(f,starting_guess);
+	starting_guess1 = omega_s;
+	starting_guess2 = -omega_s;
+	omega_01 = fsolve(f,starting_guess1);
+	omega_02 = fsolve(f,starting_guess2);
 
 	#Correct the hour angle matrix to account for night in calculations of I_o
-	omega = np.where(omega > omega_0, omega_0, omega);
-	omega = np.where(omega < -omega_0, -omega_0, omega);
+	omega = np.where(omega > omega_01, omega_01, omega);
+	omega = np.where(omega < omega_02, omega_02, omega);
 
 	#Initialize step array
 	hour = np.linspace(0,23,24, dtype=int);
@@ -186,7 +188,7 @@ def I_T(I_o,kt,rho_g,phi,delta,beta,gamma,n):
 	cos0 = np.zeros(24);
 	cos0z = np.zeros(24);
 	for i in hour:
-		if omega_n[i] == omega_0 or omega_n[i] == -omega_0:
+		if omega_n[i] == omega_01 or omega_n[i] == omega_02:
 			cos0[i] = 0;
 			cos0z[i] = 1e9;
 		else:
@@ -218,12 +220,6 @@ def S(I_o,kt,rho_g,phi,delta,beta,gamma,n,N,L,alpha_n):
 
 	#Initialize array for hour angle
 	omega = np.linspace(-180,180,25);
-
-	#Initialize array to find where angle of incidence is 90 deg
-	#o = np.linspace(0,180,1e6);
-
-	#Initialize step array
-	#s = np.linspace(0,1e6-1,1e6);
 		
 	#Calculate the sunset hour angle for the day
 	if -np.tan(phi*dtr)*np.tan(delta*dtr) > 1 or -np.tan(phi*dtr)*np.tan(delta*dtr) < -1:
@@ -236,11 +232,14 @@ def S(I_o,kt,rho_g,phi,delta,beta,gamma,n,N,L,alpha_n):
 	def f(x):
 		return np.sin(delta*dtr)*np.sin(phi*dtr)*np.cos(beta*dtr) - np.sin(delta*dtr)*np.cos(phi*dtr)*np.sin(beta*dtr)*np.cos(gamma*dtr) + np.cos(delta*dtr)*np.cos(phi*dtr)*np.cos(beta*dtr)*np.cos(x*dtr) + np.cos(delta*dtr)*np.sin(phi*dtr)*np.sin(beta*dtr)*np.cos(gamma*dtr)*np.cos(x*dtr) + np.cos(delta*dtr)*np.sin(beta*dtr)*np.sin(gamma*dtr)*np.sin(x*dtr);
 	starting_guess = omega_s;
-	omega_0 = fsolve(f,starting_guess);
+	starting_guess1 = omega_s;
+	starting_guess2 = -omega_s;
+	omega_01 = fsolve(f,starting_guess1);
+	omega_02 = fsolve(f,starting_guess2);
 
 	#Correct the hour angle matrix to account for night in calculations of I_o
-	omega = np.where(omega > omega_0, omega_0, omega);
-	omega = np.where(omega < -omega_0, -omega_0, omega);
+	omega = np.where(omega > omega_01, omega_01, omega);
+	omega = np.where(omega < omega_02, omega_02, omega);
 
 	#Initialize step array
 	hour = np.linspace(0,23,24, dtype=int);
@@ -254,7 +253,7 @@ def S(I_o,kt,rho_g,phi,delta,beta,gamma,n,N,L,alpha_n):
 	cos0 = np.zeros(24);
 	cos0z = np.zeros(24);
 	for i in hour:
-		if omega_n[i] == omega_0 or omega_n[i] == -omega_0:
+		if omega_n[i] == omega_01 or omega_n[i] == omega_02:
 			cos0[i] = 0;
 			cos0z[i] = 1e9;
 		else:
