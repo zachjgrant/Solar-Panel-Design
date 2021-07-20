@@ -60,15 +60,15 @@ alpha_n = 0.93;
 T_a = (np.array([61,61,61,61,61,61,63,65,67,70,73,75,76,77,78,79,75,70,69,68,67,65,65,62])-32)*5/9 + 273.15;
 T_dp = (np.array([61,61,61,61,61,61,62,62,63,64,65,65,66,66,66,66,64,65,64,63,62,62,62,62])-32)*5/9 + 273.15;
 T_fi = (120-32)*5/9+273.15; #120 deg F
-L_p = 0.015;
+L_p = 0.015; #m
 e = np.array([0.95,0.88,0.88]);
-W = 0.15;
-D = 0.01;
-D_i = 0.008;
-delt = 0.0005;
-k_p = 385;
-m_dot = 1.0;
-A_c = 2;
+W = 0.15; #m
+D = 0.01; #m
+D_i = 0.008; #m
+delt = 0.0005; #m
+k_p = 385; #W/mK
+m_dot = 1.0; #kg/min
+A_c = 2; #m^2
 
 #Calculations
 n = n(mon,day);
@@ -91,7 +91,7 @@ ch.add_row(["Ground Reflectance (\u03c1)",str(rho_g)]);
 ch.add_row(["# of Covers (N)", str(N)]);
 ch.add_row(["Thickness of Cover (L)", str(L*1000) + " mm"]);
 ch.add_row(["Absorptance of Plate at Normal Incidence (\u03b1\u2099)", str(alpha_n)]);
-ch.add_row(["Fluid Inlet Temperature (T)",str(np.int((T_fi-273.15)*9/5+32))+"\u00b0F"]);
+ch.add_row(["Fluid Inlet Temperature (T)",str(np.int32((T_fi-273.15)*9/5+32))+"\u00b0F"]);
 ch.add_row(["Distance Between Plates (L\u209a)",str(L_p*1000)+" mm"]);
 ch.add_row(["Emissivity of Plate (\u03b5\u209a)",str(e[0])]);
 ch.add_row(["Distance Between Tubes (W)",str(W*1000)+" mm"]);
