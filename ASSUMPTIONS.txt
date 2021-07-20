@@ -10,7 +10,7 @@ Assumptions:
 9. There is one-dimensional heat flow through the back insulation.
 10. The sky can be considered as a blackbody for long-wave radiation at an
 equivalent sky temperature.
-11. Temperature gradients around the tubes can be negected.
+11. Temperature gradients around the tubes can be neglected.
 12. The temperature gradients in the direction of flow and between the tubes
 can be treated independently.
 13. Thermal properties are independent of temperature.
